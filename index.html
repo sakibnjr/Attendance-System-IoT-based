@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        color: #343a40;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Attendance</h1>
+    <ul id="attendance-list">
+      <!-- Attendance records will be inserted here -->
+    </ul>
+
+    <script>
+      async function fetchAttendance() {
+        try {
+          const response = await fetch("http://localhost:3000/attendance");
+          const attendanceData = await response.json();
+          const attendanceList = document.getElementById("attendance-list");
+          attendanceList.innerHTML = "";
+
+          attendanceData.forEach((record) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${record.name} (MAC: ${record.mac}) - Present`;
+            attendanceList.appendChild(listItem);
+          });
+        } catch (error) {
+          console.error("Error fetching attendance:", error);
+        }
+      }
+
+      // Fetch attendance data every 10 seconds
+      setInterval(fetchAttendance, 10000);
+      fetchAttendance(); // Initial fetch
+    </script>
+  </body>
+</html>
